@@ -19,7 +19,7 @@ namespace Testy
         }
 
         [Test]
-        public void LoginTest()
+        public void ContactFormTest()
         {
             driver.Navigate().GoToUrl("http://localhost:5173/contact");
             driver.FindElement(By.Id("name")).SendKeys("Test User");
@@ -32,6 +32,33 @@ namespace Testy
             string toastMsg = toast.Text;
             Console.WriteLine(toastMsg);
             Assert.That(toastMsg, Is.EqualTo("Wiadomość została wysłana!"));
+        }
+
+        [Test]
+        public void EmptyContactForm()
+        {
+            driver.Navigate().GoToUrl("http://localhost:5173/contact");
+            driver.FindElement(By.CssSelector("button[type='submit']")).Click();
+
+            Assert.That(driver.FindElement(By.Id("name")).GetAttribute("validationMessage"), Is.EqualTo("Please fill out this field."));
+        }
+
+        [Test]
+        public void GenerateCVTest()
+        {
+            driver.Navigate().GoToUrl("http://localhost:5173/creator");
+            driver.FindElement(By.Name("first_name")).SendKeys("Jan");
+            driver.FindElement(By.Name("second_name")).SendKeys("Tester");
+            driver.FindElement(By.Name("phone")).SendKeys("997");
+            driver.FindElement(By.Name("email")).SendKeys("mail@testowy.com");
+            driver.FindElement(By.Name("address")).SendKeys("Testowa 1, 00-001 Testowo");
+            driver.FindElement(By.Name("social_media")).SendKeys("https://github.com/grzechu3o3");
+
+            driver.FindElement(By.XPath("//button[text()='Podgląd CV']")).Click();
+
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
+            var element = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//canvas")));
+            Assert.That(element.Displayed, Is.True);
         }
         [TearDown]
         public void Teardown()
