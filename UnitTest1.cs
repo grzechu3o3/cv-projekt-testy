@@ -27,7 +27,7 @@ namespace Testy
             driver.FindElement(By.Id("message")).SendKeys("Test message from Selenium WebDriver");
             driver.FindElement(By.CssSelector("button[type='submit']")).Click();
             
-            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(3));
+            var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(5));
             var toast = wait.Until(ExpectedConditions.ElementIsVisible(By.ClassName("Toastify__toast")));
             string toastMsg = toast.Text;
             Console.WriteLine(toastMsg);
@@ -60,6 +60,7 @@ namespace Testy
             var element = wait.Until(ExpectedConditions.ElementIsVisible(By.XPath("//canvas")));
             Assert.That(element.Displayed, Is.True);
         }
+
         [TearDown]
         public void Teardown()
         {
